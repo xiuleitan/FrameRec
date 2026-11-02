@@ -1,0 +1,34 @@
+# Swift build products and local package state
+.build/
+.swiftpm/
+build/
+
+# macOS and Xcode user state
+.DS_Store
+*.xcuserstate
+*.xcuserdatad/
+
+# Local logs and temporary files
+*.log
+*.tmp
+__pycache__/
+*.py[cod]
+
+# Environment files and private signing material
+.env
+.env.*
+!.env.example
+*.keychain
+*.keychain-db
+*.p12
+*.pfx
+*.pem
+*.key
+pending-private-key.pem
+/Signing/
+
+# Local recordings, exports, and recording-library state
+/recordings/
+/exports/
+.framerec-history.json
+.framerec-staging/

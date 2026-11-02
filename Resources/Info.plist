@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key><string>zh_CN</string>
+    <key>CFBundleExecutable</key><string>FrameRec</string>
+    <key>CFBundleIdentifier</key><string>com.framerec.app</string>
+    <key>CFBundleName</key><string>FrameRec</string>
+    <key>CFBundleDisplayName</key><string>FrameRec</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>0.1.3</string>
+    <key>CFBundleVersion</key><string>4</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
+    <key>LSMinimumSystemVersion</key><string>14.0</string>
+    <key>LSUIElement</key><true/>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSScreenCaptureUsageDescription</key><string>FrameRec 需要录制你框选区域内的屏幕内容和电脑内部声音。</string>
+    <key>NSAudioCaptureUsageDescription</key><string>录下电脑正在播放的声音，不采集麦克风。</string>
+    <key>NSPrincipalClass</key><string>NSApplication</string>
+</dict>
+</plist>
