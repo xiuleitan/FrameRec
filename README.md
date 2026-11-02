@@ -48,15 +48,28 @@ FrameRec 常驻菜单栏，顶部显示版本和当前状态。从这里可以�
 
 ## 环境要求
 
-- macOS 14 或更高版本。
+下载版需要 **macOS 14 或更高版本**。通用版同时支持 Apple 芯片和 Intel Mac，无需安装开发工具。应用界面目前为中文。
+
+从源码构建时还需要：
+
 - 支持 Swift 6.0 或更高版本的 Xcode Command Line Tools 或 Xcode；可通过 `xcode-select --install` 安装命令行工具。
 - Python 3，用于应用打包和本地签名脚本；构建还会调用系统的 `openssl`、`codesign` 和 `iconutil`。
 
-源码使用 Swift Package Manager 管理，没有外部 Swift 包依赖。应用界面目前为中文。
+源码使用 Swift Package Manager 管理，没有外部 Swift 包依赖。
 
 ## 安装与启动
 
-从源码构建：
+### 直接下载安装
+
+前往 [GitHub Releases 下载最新版本](https://github.com/xiuleitan/FrameRec/releases/latest)。
+
+1. 推荐下载 `FrameRec-<版本>-macOS-universal.dmg`，打开后将 `FrameRec.app` 拖到“应用程序”。
+2. 也可以下载同名 `.zip`，解压后将 `FrameRec.app` 拖到“应用程序”。无需下载 `Source code` 源码包。
+3. 从“应用程序”打开 FrameRec，再点击菜单栏右侧的取景框图标使用。更新时请先退出旧版。
+
+当前发布使用固定的本地签名，**尚未使用 Apple Developer ID 签名或经过 Apple 公证**。如果首次打开被 macOS 拦截，请在确认下载来源后，按照 [Apple 官方说明](https://support.apple.com/zh-cn/102445)前往“系统设置 → 隐私与安全性”，找到 FrameRec 提示并选择“仍要打开”。具体步骤见 [安装说明](docs/INSTALL.zh-CN.txt)。
+
+### 从源码构建
 
 ```sh
 git clone https://github.com/xiuleitan/FrameRec.git
@@ -150,6 +163,16 @@ open build/FrameRec.app
 从 0.1.2 或更早的临时签名版本迁移时，需要一次性在“录屏与系统录音”中移除旧的 FrameRec 项，再添加新的 `FrameRec.app`，然后完全退出并重新打开。之后的本地构建会复用同一个证书。可以运行 `python3 scripts/check-signing.py` 验证不同构建身份一致，同时拒绝不同签名。
 
 若有 Developer ID，可通过 `FRAMEREC_SIGN_IDENTITY` 指定签名身份。分发到其他 Mac 的签名与公证需要单独配置。
+
+### 制作发布包
+
+```sh
+./scripts/package-release.sh
+```
+
+脚本构建 arm64 / x86_64 通用版，并在 `build/releases/v<版本>/` 生成 DMG、ZIP 和 `SHA256SUMS.txt`。DMG 内附“应用程序”快捷入口、中英文安装说明及许可证；ZIP 内为 `FrameRec.app`。打包时会验证两个架构、应用签名和 ZIP 解压后的签名，已有同版本输出会被保留并停止覆盖。
+
+单独构建通用应用可运行 `./scripts/build.sh release universal`，产物为 `build/universal/FrameRec.app`。未指定第二个参数时仍构建当前 Mac 架构，产物为 `build/FrameRec.app`。本地签名不等同于 Developer ID 签名或 Apple 公证。
 
 更详细的已有验证范围和版本修复记录见 [验证记录](docs/VALIDATION.md)、[0.1.1 框选修复](docs/FIX-0.1.1.md) 和 [0.1.3 授权修复](docs/FIX-0.1.3.md)。
 

@@ -3,19 +3,35 @@ set -euo pipefail
 PROJECT_DIR="${0:A:h:h}"
 cd "$PROJECT_DIR"
 CONFIGURATION="${1:-release}"
-if [[ "$CONFIGURATION" != "release" && "$CONFIGURATION" != "debug" ]]; then
-    print -u2 "Usage: ./scripts/build.sh [release|debug]"
+ARCHITECTURE="${2:-native}"
+if (( $# > 2 )) || [[ "$CONFIGURATION" != "release" && "$CONFIGURATION" != "debug" ]] || \
+   [[ "$ARCHITECTURE" != "native" && "$ARCHITECTURE" != "universal" ]]; then
+    print -u2 "Usage: ./scripts/build.sh [release|debug] [native|universal]"
     exit 1
 fi
-swift build -c "$CONFIGURATION" --product FrameRec
-BINARY_DIR="$(swift build -c "$CONFIGURATION" --show-bin-path)"
-APP_DIR="$PROJECT_DIR/build/FrameRec.app"
-mkdir -p "$PROJECT_DIR/build"
-PACKAGE_STAGE="$(mktemp -d "$PROJECT_DIR/build/.package.XXXXXXXX")"
+BUILD_ARGUMENTS=(-c "$CONFIGURATION")
+APP_PARENT="$PROJECT_DIR/build"
+if [[ "$ARCHITECTURE" == "universal" ]]; then
+    BUILD_ARGUMENTS+=(--arch arm64 --arch x86_64 --scratch-path "$PROJECT_DIR/.build/release-universal")
+    APP_PARENT="$PROJECT_DIR/build/universal"
+fi
+swift build "${BUILD_ARGUMENTS[@]}" --product FrameRec
+BINARY_DIR="$(swift build "${BUILD_ARGUMENTS[@]}" --show-bin-path)"
+APP_DIR="$APP_PARENT/FrameRec.app"
+mkdir -p "$APP_PARENT"
+PACKAGE_STAGE="$(mktemp -d "$APP_PARENT/.package.XXXXXXXX")"
 trap 'rm -rf "$PACKAGE_STAGE"' EXIT
 STAGED_APP_DIR="$PACKAGE_STAGE/FrameRec.app"
 mkdir -p "$STAGED_APP_DIR/Contents/MacOS" "$STAGED_APP_DIR/Contents/Resources"
 cp "$BINARY_DIR/FrameRec" "$STAGED_APP_DIR/Contents/MacOS/FrameRec"
+if [[ "$CONFIGURATION" == "release" ]]; then
+    strip -S -x "$STAGED_APP_DIR/Contents/MacOS/FrameRec"
+fi
+if [[ "$ARCHITECTURE" == "universal" ]]; then
+    for REQUIRED_ARCHITECTURE in arm64 x86_64; do
+        lipo "$STAGED_APP_DIR/Contents/MacOS/FrameRec" -verify_arch "$REQUIRED_ARCHITECTURE"
+    done
+fi
 cp "$PROJECT_DIR/Resources/Info.plist" "$STAGED_APP_DIR/Contents/Info.plist"
 ICON_CACHE="$PROJECT_DIR/build/AppIcon.icns"
 if [[ ! -f "$ICON_CACHE" || "$PROJECT_DIR/scripts/make-icon.swift" -nt "$ICON_CACHE" ]]; then

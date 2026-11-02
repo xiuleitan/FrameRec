@@ -1,0 +1,41 @@
+FrameRec 安装与使用
+
+系统要求：macOS 14 或更高版本。
+通用版同时包含 Apple 芯片（arm64）和 Intel（x86_64）程序。
+下载版不需要 Xcode、Python 或其他开发工具。应用界面为中文。
+
+安装
+
+1. 打开下载的 DMG，将 FrameRec.app 拖到 Applications（应用程序）。
+   如果下载的是 ZIP，请先解压，再把 FrameRec.app 拖到“应用程序”。
+2. 从“应用程序”打开 FrameRec。应用常驻菜单栏，点击取景框图标使用；
+   启动后没有普通主窗口或 Dock 图标是正常现象。
+3. 更新已有安装时，请先从 FrameRec 菜单退出旧版，再替换应用。
+
+首次打开
+
+当前发布使用固定的本地签名，尚未使用 Apple Developer ID 签名或经过 Apple 公证。
+如果 macOS 提示无法验证开发者或无法检查恶意软件，请先确认下载来自：
+https://github.com/xiuleitan/FrameRec/releases
+
+尝试打开后，前往“系统设置 → 隐私与安全性”，找到 FrameRec 的提示，
+点击“仍要打开”，再按系统提示确认。受组织管理的 Mac 可能限制此操作。
+具体说明：https://support.apple.com/zh-cn/102445
+
+录屏权限
+
+首次开始录屏时，在“隐私与安全性 → 屏幕与系统音频录制”中允许 FrameRec，
+必要时完全退出并重新打开应用。FrameRec 录制电脑内部声音，不使用麦克风。
+
+常用快捷键
+
+开始框选：Control + Option + R
+暂停 / 继续：Control + Option + P
+结束并保存：Control + Option + S
+
+文件保留
+
+默认保存在 ~/Movies/FrameRec，可在设置中修改。
+历史录屏在录制完成 30 天后自动清理；需要长期保留的内容请“导出副本”。
+
+使用与问题反馈：https://github.com/xiuleitan/FrameRec

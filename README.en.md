@@ -48,15 +48,28 @@ Play a recording, step through frames, and drag across the timeline to select a 
 
 ## Requirements
 
-- macOS 14 or later.
+The download requires **macOS 14 or later**. The universal app supports both Apple Silicon and Intel Macs, with no development tools needed. The app interface is currently in Chinese.
+
+Building from source additionally requires:
+
 - Xcode Command Line Tools or Xcode with Swift 6.0 or later. Install the command line tools with `xcode-select --install`.
 - Python 3 for packaging and local signing scripts. The build also uses `openssl`, `codesign`, and `iconutil`.
 
-The source uses Swift Package Manager with no external Swift package dependencies. The app interface is currently in Chinese.
+The source uses Swift Package Manager with no external Swift package dependencies.
 
-## Build and launch
+## Install and launch
 
-Build from source:
+### Download the app
+
+Get the latest version from [GitHub Releases](https://github.com/xiuleitan/FrameRec/releases/latest).
+
+1. Download `FrameRec-<version>-macOS-universal.dmg`, open it, and drag `FrameRec.app` to Applications.
+2. Alternatively, extract the matching `.zip` and drag `FrameRec.app` to Applications. You do not need the `Source code` archives.
+3. Open FrameRec from Applications and click the viewfinder icon in the menu bar. Quit an existing installation before updating.
+
+The current release uses a persistent local signature and **has no Apple Developer ID signature or Apple notarization**. If macOS blocks the first launch, verify the download source, then follow [Apple's instructions](https://support.apple.com/en-us/102445): open System Settings > Privacy & Security, find the FrameRec notice, and choose Open Anyway. See the [installation instructions](docs/INSTALL.en.txt) for details.
+
+### Build from source
 
 ```sh
 git clone https://github.com/xiuleitan/FrameRec.git
@@ -150,6 +163,16 @@ The build script reuses a persistent local signing certificate stored at `~/Libr
 When migrating from version 0.1.2 or an earlier ad-hoc-signed build, remove the old FrameRec entry from Screen & System Audio Recording once, add the new `FrameRec.app`, then fully quit and reopen the app. Subsequent local builds reuse the same certificate. Run `python3 scripts/check-signing.py` to verify that different builds retain the same signing identity while a different signature is rejected.
 
 If you have a Developer ID, set `FRAMEREC_SIGN_IDENTITY` to choose that identity. Signing and notarization for distribution to other Macs require separate configuration.
+
+### Package a release
+
+```sh
+./scripts/package-release.sh
+```
+
+The script builds a universal arm64 / x86_64 app and creates a DMG, ZIP, and `SHA256SUMS.txt` in `build/releases/v<version>/`. The DMG includes an Applications shortcut, Chinese and English installation notes, and the license. The ZIP contains `FrameRec.app`. Packaging checks both architectures, the app signature, and the signature after extracting the ZIP. Existing output for the same version is preserved and causes the script to stop.
+
+To build only the universal app, run `./scripts/build.sh release universal`; output is at `build/universal/FrameRec.app`. Omitting the second argument keeps building for the current Mac at `build/FrameRec.app`. A local signature is separate from Developer ID signing and Apple notarization.
 
 Existing validation scope and fixes are documented in the [validation notes](docs/VALIDATION.md), [0.1.1 selection fix](docs/FIX-0.1.1.md), and [0.1.3 permission fix](docs/FIX-0.1.3.md). These notes are in Chinese.
 

@@ -1,0 +1,48 @@
+FrameRec installation and usage
+
+Requires macOS 14 or later.
+The universal app includes Apple Silicon (arm64) and Intel (x86_64) executables.
+No Xcode, Python, or other development tools are needed to run the download.
+The app interface is currently in Chinese.
+
+Installation
+
+1. Open the DMG and drag FrameRec.app to Applications.
+   For the ZIP download, extract it and drag FrameRec.app to Applications.
+2. Open FrameRec from Applications. It runs in the menu bar; click the
+   viewfinder icon. Having no normal main window or Dock icon is expected.
+3. When updating an existing installation, quit the old app from its menu
+   before replacing it.
+
+First launch
+
+This release uses a persistent local signature. It is not signed with an
+Apple Developer ID and has not been notarized by Apple.
+If macOS cannot verify the developer or check the app for malicious software,
+first confirm that your download came from:
+https://github.com/xiuleitan/FrameRec/releases
+
+After attempting to open the app, go to System Settings > Privacy & Security,
+find the FrameRec notice, choose Open Anyway, and follow the confirmation.
+Organization-managed Macs may restrict this option.
+Apple's instructions: https://support.apple.com/en-us/102445
+
+Screen recording permission
+
+When starting your first recording, allow FrameRec under Privacy & Security >
+Screen & System Audio Recording. Fully quit and reopen the app if needed.
+FrameRec records system audio without using the microphone.
+
+Default shortcuts
+
+Select a region: Control + Option + R
+Pause / resume: Control + Option + P
+Stop and save: Control + Option + S
+
+File retention
+
+Recordings are saved to ~/Movies/FrameRec by default; change this in Settings.
+History recordings are automatically cleaned up 30 days after completion.
+Use Export Copy to keep a recording long term.
+
+Usage and issue reporting: https://github.com/xiuleitan/FrameRec
